@@ -32,6 +32,7 @@ def download_video():
     ydl_opts = {
         "format": f"bestvideo[height<={quality}][ext=mp4]+bestaudio[ext=m4a]/best[height<={quality}][ext=mp4]/best",
         "outtmpl": output_template,
+        "cookiefile": "cookies.txt",
         "merge_output_format": "mp4",
         "quiet": True,
         "noplaylist": True,
