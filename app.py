@@ -1,4 +1,4 @@
-from flask import Flask, request, send_file, jsonify, after_this_request
+from flask import Flask, request, send_file, jsonify, after_this_request, render_template
 from flask_cors import CORS
 import yt_dlp
 import os
@@ -12,6 +12,11 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DOWNLOAD_DIR = os.path.join(BASE_DIR, "downloads")
 os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 
+# এই অংশটি আপনার ওয়েবসাইট দেখানোর জন্য জরুরি (Home Route)
+@app.route("/")
+def home():
+    return render_template("index.html")
+
 @app.route("/download", methods=["POST"])
 def download_video():
     data = request.json
@@ -24,7 +29,6 @@ def download_video():
     file_id = str(uuid.uuid4())
     output_template = os.path.join(DOWNLOAD_DIR, f"{file_id}.%(ext)s")
 
-    # পাওয়ারফুল ডাউনলোড কনফিগারেশন
     ydl_opts = {
         "format": f"bestvideo[height<={quality}][ext=mp4]+bestaudio[ext=m4a]/best[height<={quality}][ext=mp4]/best",
         "outtmpl": output_template,
@@ -40,11 +44,9 @@ def download_video():
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(url, download=True)
             original_filename = ydl.prepare_filename(info)
-            # ফাইল এক্সটেনশন নিশ্চিত করা
             final_path = original_filename.rsplit(".", 1)[0] + ".mp4"
-            video_title = info.get('title', 'video').replace('/', '_') # টাইটেল থেকে অবৈধ ক্যারেক্টার সরানো
+            video_title = info.get('title', 'video').replace('/', '_')
 
-        # ফাইল পাঠানোর পর সার্ভার থেকে ডিলিট করার ব্যবস্থা (Memory clean-up)
         @after_this_request
         def remove_file(response):
             try:
@@ -64,6 +66,5 @@ def download_video():
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
-    # Render-এর জন্য সঠিক পোর্ট এবং হোস্ট
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
