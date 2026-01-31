@@ -11,9 +11,10 @@ CORS(app)
 DOWNLOAD_DIR = "/tmp/downloads"
 os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 
-# --- গুগল ভেরিফিকেশন রুট (এখানে যোগ করা হয়েছে) ---
+# ১. গুগল ভেরিফিকেশন রুট (ডুপ্লিকেট রিমুভ করা হয়েছে এবং ফরম্যাট ঠিক করা হয়েছে)
 @app.route("/google9e2fb0bcc08994d3.html")
 def google_verify():
+    # গুগল সাধারণত এই ফাইলটির ভেতর শুধু এই টেক্সটটুকু দেখতে চায়
     return "google-site-verification: google9e2fb0bcc08994d3.html"
 
 @app.route("/")
