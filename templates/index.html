@@ -1,180 +1,178 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FTY Video Downloader - Task Style</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>FTY Media Tools - Best Online Video Downloader</title>
+    <meta name="description" content="FTY Media Tools is the fastest online video downloader. Download high-quality videos for free without any hassle.">
+    <meta name="keywords" content="FTY Media Tools, video downloader, download youtube video, free media tools, mp4 downloader">
+    <meta name="author" content="FTY Media">
 
-<style>
-:root {
-  --neon-blue: #00c3ff;
-  --neon-yellow: #ffcc00;
-  --dark-bg: #0b111a;
-  --panel-bg: rgba(0, 26, 51, 0.9);
-}
+    <meta property="og:title" content="FTY Media Tools">
+    <meta property="og:description" content="Download high-quality videos easily with FTY Media Tools.">
+    <meta property="og:type" content="website">
 
-* {
-  box-sizing: border-box;
-  font-family: 'Segoe UI', Roboto, sans-serif;
-}
+    <style>
+        :root {
+          --neon-blue: #00c3ff;
+          --neon-yellow: #ffcc00;
+          --dark-bg: #0b111a;
+          --panel-bg: rgba(0, 26, 51, 0.9);
+        }
 
-body {
-  margin: 0;
-  min-height: 100vh;
-  background: radial-gradient(circle, #1a2a44 0%, #050a12 100%); /* ডার্ক গেমিং ব্যাকগ্রাউন্ড */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  overflow-x: hidden;
-}
+        * {
+          box-sizing: border-box;
+          font-family: 'Segoe UI', Roboto, sans-serif;
+        }
 
-/* মেইন প্যানেল */
-.container {
-  width: 100%;
-  max-width: 480px;
-  background: var(--panel-bg);
-  border: 2px solid var(--neon-blue);
-  padding: 30px 20px;
-  position: relative;
-  box-shadow: 0 0 30px rgba(0, 195, 255, 0.2);
-  clip-path: polygon(0 5%, 5% 0, 95% 0, 100% 5%, 100% 95%, 95% 100%, 5% 100%, 0 95%);
-}
+        body {
+          margin: 0;
+          min-height: 100vh;
+          background: radial-gradient(circle, #1a2a44 0%, #050a12 100%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 20px;
+          overflow-x: hidden;
+        }
 
-/* --- ১. এনিমেটেড টাস্ক ইনপুট --- */
-.task-card {
-  position: relative;
-  margin-bottom: 30px;
-}
+        .container {
+          width: 100%;
+          max-width: 480px;
+          background: var(--panel-bg);
+          border: 2px solid var(--neon-blue);
+          padding: 30px 20px;
+          position: relative;
+          box-shadow: 0 0 30px rgba(0, 195, 255, 0.2);
+          clip-path: polygon(0 5%, 5% 0, 95% 0, 100% 5%, 100% 95%, 95% 100%, 5% 100%, 0 95%);
+        }
 
-.task-icon-box {
-  position: absolute;
-  left: -10px;
-  top: 50%;
-  transform: translateY(-50%) rotate(-5deg);
-  width: 60px;
-  height: 60px;
-  background: #000;
-  border: 3px solid var(--neon-blue);
-  z-index: 5;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 0 15px var(--neon-blue);
-  animation: pulse-blue 1.5s infinite alternate;
-}
+        .task-card {
+          position: relative;
+          margin-bottom: 30px;
+        }
 
-.task-input-field {
-  width: 100%;
-  height: 55px;
-  background: linear-gradient(90deg, #001a33, #004e92);
-  border: 2px solid #fff;
-  padding: 0 20px 0 65px;
-  color: #fff;
-  font-size: 16px;
-  font-weight: bold;
-  font-style: italic;
-  clip-path: polygon(5% 0%, 100% 0%, 95% 100%, 0% 100%);
-  outline: none;
-}
+        .task-icon-box {
+          position: absolute;
+          left: -10px;
+          top: 50%;
+          transform: translateY(-50%) rotate(-5deg);
+          width: 60px;
+          height: 60px;
+          background: #000;
+          border: 3px solid var(--neon-blue);
+          z-index: 5;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          box-shadow: 0 0 15px var(--neon-blue);
+          animation: pulse-blue 1.5s infinite alternate;
+        }
 
-/* --- ২. এনিমেটেড কোয়ালিটি কার্ডস --- */
-.quality-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 15px;
-  margin-bottom: 30px;
-}
+        .task-input-field {
+          width: 100%;
+          height: 55px;
+          background: linear-gradient(90deg, #001a33, #004e92);
+          border: 2px solid #fff;
+          padding: 0 20px 0 65px;
+          color: #fff;
+          font-size: 16px;
+          font-weight: bold;
+          font-style: italic;
+          clip-path: polygon(5% 0%, 100% 0%, 95% 100%, 0% 100%);
+          outline: none;
+        }
 
-.quality-row {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(0, 195, 255, 0.3);
-  padding: 12px;
-  color: #ccc;
-  cursor: pointer;
-  text-align: center;
-  font-weight: bold;
-  clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
-  transition: 0.3s;
-  position: relative;
-  overflow: hidden;
-}
+        .quality-container {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 15px;
+          margin-bottom: 30px;
+        }
 
-.quality-row:hover {
-  background: rgba(0, 195, 255, 0.1);
-  border-color: var(--neon-blue);
-  color: #fff;
-}
+        .quality-row {
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid rgba(0, 195, 255, 0.3);
+          padding: 12px;
+          color: #ccc;
+          cursor: pointer;
+          text-align: center;
+          font-weight: bold;
+          clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+          transition: 0.3s;
+          position: relative;
+          overflow: hidden;
+        }
 
-.quality-row.active {
-  background: var(--neon-blue);
-  color: #000;
-  border-color: #fff;
-  box-shadow: 0 0 15px var(--neon-blue);
-  transform: scale(1.05);
-}
+        .quality-row:hover {
+          background: rgba(0, 195, 255, 0.1);
+          border-color: var(--neon-blue);
+          color: #fff;
+        }
 
-.badge {
-  display: block;
-  font-size: 10px;
-  opacity: 0.7;
-}
+        .quality-row.active {
+          background: var(--neon-blue);
+          color: #000;
+          border-color: #fff;
+          box-shadow: 0 0 15px var(--neon-blue);
+          transform: scale(1.05);
+        }
 
-/* --- ৩. এনিমেটেড এক্সচেঞ্জ বাটন --- */
-.exchange-btn-container {
-  display: flex;
-  justify-content: center;
-}
+        .badge {
+          display: block;
+          font-size: 10px;
+          opacity: 0.7;
+        }
 
-.exchange-btn {
-  background: #000;
-  color: var(--neon-yellow);
-  font-size: 20px;
-  font-weight: 800;
-  padding: 12px 50px;
-  border: 2px solid var(--neon-yellow);
-  cursor: pointer;
-  text-transform: uppercase;
-  clip-path: polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%);
-  box-shadow: 0 0 10px rgba(255, 204, 0, 0.4);
-  transition: 0.3s;
-  animation: btn-glow 2s infinite;
-}
+        .exchange-btn-container {
+          display: flex;
+          justify-content: center;
+        }
 
-.exchange-btn:hover {
-  background: var(--neon-yellow);
-  color: #000;
-  box-shadow: 0 0 25px var(--neon-yellow);
-}
+        .exchange-btn {
+          background: #000;
+          color: var(--neon-yellow);
+          font-size: 20px;
+          font-weight: 800;
+          padding: 12px 50px;
+          border: 2px solid var(--neon-yellow);
+          cursor: pointer;
+          text-transform: uppercase;
+          clip-path: polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%);
+          box-shadow: 0 0 10px rgba(255, 204, 0, 0.4);
+          transition: 0.3s;
+          animation: btn-glow 2s infinite;
+        }
 
-/* --- এনিমেশন কি-ফ্রেমস --- */
-@keyframes floating {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
-}
+        .exchange-btn:hover {
+          background: var(--neon-yellow);
+          color: #000;
+        }
 
-@keyframes pulse-blue {
-  from { box-shadow: 0 0 5px var(--neon-blue); }
-  to { box-shadow: 0 0 20px var(--neon-blue), 0 0 30px rgba(0, 195, 255, 0.4); }
-}
+        @keyframes pulse-blue {
+          from { box-shadow: 0 0 5px var(--neon-blue); }
+          to { box-shadow: 0 0 20px var(--neon-blue), 0 0 30px rgba(0, 195, 255, 0.4); }
+        }
 
-@keyframes btn-glow {
-  0%, 100% { filter: brightness(1); }
-  50% { filter: brightness(1.3) drop-shadow(0 0 10px var(--neon-yellow)); }
-}
+        @keyframes btn-glow {
+          0%, 100% { filter: brightness(1); }
+          50% { filter: brightness(1.3) drop-shadow(0 0 10px var(--neon-yellow)); }
+        }
 
-/* Responsive */
-@media (max-width: 480px) {
-  .container { padding: 20px 15px; }
-  .task-input-field { font-size: 14px; }
-}
-</style>
+        @media (max-width: 480px) {
+          .container { padding: 20px 15px; }
+          .task-input-field { font-size: 14px; }
+        }
+    </style>
 </head>
-
 <body>
 
 <div class="container">
-  
+  <h1 style="color: var(--neon-blue); text-align: center; font-family: sans-serif; letter-spacing: 2px; text-shadow: 0 0 10px var(--neon-blue); margin-top: 0; font-size: 1.8rem;">
+    FTY MEDIA TOOLS
+  </h1>
+
   <div class="task-card">
     <div class="task-icon-box">
         <img src="https://cdn-icons-png.flaticon.com/512/616/616412.png" width="35" alt="icon">
@@ -183,32 +181,20 @@ body {
   </div>
   
   <div class="quality-container" id="qualityTable">
-    <div class="quality-row" data-quality="360">
-      360p <span class="badge">LOW QUALITY</span>
-    </div>
-    <div class="quality-row" data-quality="480">
-      480p <span class="badge">STANDARD</span>
-    </div>
-    <div class="quality-row" data-quality="720">
-      720p <span class="badge">HIGH DEF</span>
-    </div>
-    <div class="quality-row" data-quality="1080">
-      1080p <span class="badge">ULTRA HD</span>
-    </div>
+    <div class="quality-row" data-quality="360">360p <span class="badge">LOW QUALITY</span></div>
+    <div class="quality-row" data-quality="480">480p <span class="badge">STANDARD</span></div>
+    <div class="quality-row" data-quality="720">720p <span class="badge">HIGH DEF</span></div>
+    <div class="quality-row" data-quality="1080">1080p <span class="badge">ULTRA HD</span></div>
   </div>
   
   <div class="exchange-btn-container">
-    <button class="exchange-btn" id="dlBtn" onclick="downloadVideo()">
-      DOWNLOAD
-    </button>
+    <button class="exchange-btn" id="dlBtn" onclick="downloadVideo()">DOWNLOAD</button>
   </div>
-  
 </div>
 
 <script>
   let selectedQuality = null;
   
-  // Quality Selection Logic
   document.querySelectorAll(".quality-row").forEach(row => {
     row.addEventListener("click", () => {
       document.querySelectorAll(".quality-row").forEach(r => r.classList.remove("active"));
@@ -241,19 +227,22 @@ body {
       const downloadUrl = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = downloadUrl;
-      a.download = `FTY_TASK_VIDEO_${selectedQuality}p.mp4`;
+      a.download = `FTY_VIDEO_${selectedQuality}p.mp4`;
       document.body.appendChild(a);
       a.click();
+      
       setTimeout(() => {
-      URL.revokeObjectURL(downloadUrl);
-      a.remove();
-    }, 150);
-      document.body.removeChild(a);
+        URL.revokeObjectURL(downloadUrl);
+        if (document.body.contains(a)) {
+            document.body.removeChild(a);
+        }
+      }, 150);
       
     } catch (err) {
-      alert("Download Failed!");
+      alert("Download Failed! Check your internet or link.");
     } finally {
       btn.innerText = "DOWNLOAD";
+      btn.disabled = false;
       btn.style.opacity = "1";
     }
   }
