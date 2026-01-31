@@ -12,8 +12,7 @@ os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 
 @app.route("/")
 def home():
-    # index.html অবশ্যই templates ফোল্ডারে থাকতে হবে
-    return render_template("index.html")
+    return render_template("index.html")  # index.html অবশ্যই templates ফোল্ডারে থাকতে হবে
 
 @app.route("/download", methods=["POST"])
 def download_video():
@@ -24,20 +23,25 @@ def download_video():
         return jsonify({"error": "No URL provided"}), 400
 
     file_id = str(uuid.uuid4())
-    # টিকটক/ফেসবুকের জন্য সহজ ফরম্যাট
     final_path = os.path.join(DOWNLOAD_DIR, f"{file_id}.mp4")
 
     ydl_opts = {
-        "format": "best",
+        "format": "bestvideo+bestaudio/best",
         "outtmpl": final_path,
         "quiet": True,
         "no_warnings": True,
+        "ignoreerrors": True,
+        "noplaylist": True,
+        "merge_output_format": "mp4",  # video+audio merge
     }
 
     try:
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(url, download=True)
-            video_title = info.get('title', 'video').replace('/', '_')
+            if not info:
+                return jsonify({"error": "ভিডিও ডাউনলোড করতে পারছি না। লিঙ্ক চেক করুন।"}), 500
+
+            video_title = info.get("title", "video").replace("/", "_")
 
         @after_this_request
         def remove_file(response):
@@ -48,7 +52,8 @@ def download_video():
         return send_file(final_path, as_attachment=True, download_name=f"{video_title}.mp4")
 
     except Exception as e:
-        return jsonify({"error": "ডাউনলোড ব্যর্থ হয়েছে। লিঙ্কটি আবার চেক করুন।"}), 500
+        print("Download error:", e)  # debug এর জন্য
+        return jsonify({"error": f"ডাউনলোড ব্যর্থ হয়েছে। কারন: {str(e)}"}), 500
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
