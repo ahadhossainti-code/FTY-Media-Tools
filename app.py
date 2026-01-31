@@ -28,22 +28,22 @@ def download_video():
     file_id = str(uuid.uuid4())
     output_template = os.path.join(DOWNLOAD_DIR, f"{file_id}.%(ext)s")
 
-    # ইউটিউব ব্লক এড়াতে শক্তিশালী কনফিগারেশন
+    # ইউটিউবের বাধা এড়াতে সব ধরণের শক্তিশালী কমান্ড এখানে যুক্ত করা হয়েছে
     ydl_opts = {
         "format": f"bestvideo[height<={quality}][ext=mp4]+bestaudio[ext=m4a]/best[height<={quality}][ext=mp4]/best",
         "outtmpl": output_template,
         "merge_output_format": "mp4",
-        "cookiefile": "cookies.txt",  # গিটহাবে অবশ্যই cookies.txt ফাইল থাকতে হবে
+        "cookiefile": "cookies.txt",  # এটি অবশ্যই গিটহাবে থাকতে হবে
         "quiet": True,
         "noplaylist": True,
         "extractor_args": {
             "youtube": {
-                "player_client": ["android", "web"],
+                "player_client": ["android", "ios"], # ফোনের ক্লায়েন্ট ব্যবহার করা হয়েছে
                 "po_token": ["web+web_embedded"]
             }
         },
         "http_headers": {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+            'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5 Mobile/15E148 Safari/604.1'
         }
     }
 
