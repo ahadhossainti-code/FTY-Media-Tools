@@ -11,6 +11,11 @@ CORS(app)
 DOWNLOAD_DIR = "/tmp/downloads"
 os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 
+# --- গুগল ভেরিফিকেশন রুট (এখানে যোগ করা হয়েছে) ---
+@app.route("/google9e2fb0bcc08994d3.html")
+def google_verify():
+    return "google-site-verification: google9e2fb0bcc08994d3.html"
+
 @app.route("/")
 def home():
     return render_template("index.html")
@@ -19,7 +24,7 @@ def home():
 def download_video():
     data = request.json
     url = data.get("url")
-    quality = data.get("quality", "720") # HTML থেকে পাঠানো কোয়ালিটি রিসিভ করা
+    quality = data.get("quality", "720") 
 
     if not url:
         return jsonify({"error": "No URL provided"}), 400
@@ -27,7 +32,6 @@ def download_video():
     file_id = str(uuid.uuid4())
     final_path = os.path.join(DOWNLOAD_DIR, f"{file_id}.mp4")
 
-    # কোয়ালিটি অনুযায়ী ফরম্যাট সেট করা
     ydl_opts = {
         "format": f"bestvideo[height<={quality}][ext=mp4]+bestaudio[ext=m4a]/best[height<={quality}][ext=mp4]/best",
         "outtmpl": final_path,
@@ -59,7 +63,6 @@ def download_video():
 
     except Exception as e:
         print("Download error:", e)
-        # আংশিক ফাইল তৈরি হলে তা ডিলিট করা
         if os.path.exists(final_path):
             os.remove(final_path)
         return jsonify({"error": f"Download failed: {str(e)}"}), 500
