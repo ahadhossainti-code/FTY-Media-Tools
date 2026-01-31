@@ -1,67 +1,60 @@
-from flask import Flask, render_template, request, send_file, jsonify, after_this_request
+from flask import Flask, request, send_file, jsonify, render_template, after_this_request
+from flask_cors import CORS
 import yt_dlp
 import os
 import uuid
 
 app = Flask(__name__)
+CORS(app)
 
-# Safe directory for temporary files on cloud servers like Render
-DOWNLOAD_DIR = "/tmp/downloads"
-if not os.path.exists(DOWNLOAD_DIR):
-    os.makedirs(DOWNLOAD_DIR)
+DOWNLOAD_DIR = "downloads"
+os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 
 @app.route("/")
 def home():
-    return render_template("index.html")
+    return render_template("index.html")  # index.html অবশ্যই templates ফোল্ডারে থাকতে হবে
 
 @app.route("/download", methods=["POST"])
-def download():
-    data = request.get_json()
+def download_video():
+    data = request.json
     url = data.get("url")
-    quality = data.get("quality")
     
-    if not url or not quality:
-        return jsonify({"error": "Missing video link or quality selection!"}), 400
-    
-    # Generate unique filename to avoid conflicts between users
-    unique_id = uuid.uuid4().hex
-    filename = f"FTY_VIDEO_{quality}p_{unique_id}.mp4"
-    filepath = os.path.join(DOWNLOAD_DIR, filename)
-    
+    if not url:
+        return jsonify({"error": "No URL provided"}), 400
+
+    file_id = str(uuid.uuid4())
+    final_path = os.path.join(DOWNLOAD_DIR, f"{file_id}.mp4")
+
+    ydl_opts = {
+        "format": "bestvideo+bestaudio/best",
+        "outtmpl": final_path,
+        "quiet": True,
+        "no_warnings": True,
+        "ignoreerrors": True,
+        "noplaylist": True,
+        "merge_output_format": "mp4",  # video+audio merge
+    }
+
     try:
-        ydl_opts = {
-            # Logic to merge best video and audio based on selected quality
-            "format": f"bestvideo[height<={quality}][ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best",
-            "outtmpl": filepath,
-            "quiet": True,
-            "noplaylist": True,
-            "merge_output_format": "mp4",
-        }
-        
-        # Start downloading the video
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            ydl.download([url])
-        
-        # --- File Cleanup Logic ---
-        # This function runs automatically after the file is sent to the user
+            info = ydl.extract_info(url, download=True)
+            if not info:
+                return jsonify({"error": "ভিডিও ডাউনলোড করতে পারছি না। লিঙ্ক চেক করুন।"}), 500
+
+            video_title = info.get("title", "video").replace("/", "_")
+
         @after_this_request
-        def cleanup(response):
-            try:
-                if os.path.exists(filepath):
-                    os.remove(filepath)
-            except Exception as e:
-                app.logger.error(f"Error cleaning up file: {e}")
+        def remove_file(response):
+            if os.path.exists(final_path):
+                os.remove(final_path)
             return response
 
-        # Send the file to the user's browser
-        return send_file(filepath, as_attachment=True)
-    
+        return send_file(final_path, as_attachment=True, download_name=f"{video_title}.mp4")
+
     except Exception as e:
-        # Delete partial file if download fails
-        if os.path.exists(filepath):
-            os.remove(filepath)
-        print(f"Download error: {e}")
-        return jsonify({"error": "Download failed! Please check the link or try another quality."}), 500
+        print("Download error:", e)  # debug এর জন্য
+        return jsonify({"error": f"ডাউনলোড ব্যর্থ হয়েছে। কারন: {str(e)}"}), 500
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
