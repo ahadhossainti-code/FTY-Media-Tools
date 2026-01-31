@@ -226,6 +226,7 @@ body {
     
     try {
       btn.innerText = "PROCESSING...";
+      btn.disabled = true; 
       btn.style.opacity = "0.7";
       
       const res = await fetch("https://fty-media-tools-1.onrender.com/download", {
@@ -243,6 +244,10 @@ body {
       a.download = `FTY_TASK_VIDEO_${selectedQuality}p.mp4`;
       document.body.appendChild(a);
       a.click();
+      setTimeout(() => {
+      URL.revokeObjectURL(downloadUrl);
+      a.remove();
+    }, 150);
       document.body.removeChild(a);
       
     } catch (err) {
