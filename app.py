@@ -11,11 +11,15 @@ CORS(app)
 DOWNLOAD_DIR = "/tmp/downloads"
 os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 
-# ১. গুগল ভেরিফিকেশন রুট (ডুপ্লিকেট রিমুভ করা হয়েছে এবং ফরম্যাট ঠিক করা হয়েছে)
+# ১. গুগল ভেরিফিকেশন রুট
 @app.route("/google9e2fb0bcc08994d3.html")
 def google_verify():
-    # গুগল সাধারণত এই ফাইলটির ভেতর শুধু এই টেক্সটটুকু দেখতে চায়
     return "google-site-verification: google9e2fb0bcc08994d3.html"
+
+# ২. রোবটস ফাইল (গুগলকে সাইট ক্রল করার অনুমতি দিতে)
+@app.route("/robots.txt")
+def robots():
+    return "User-agent: *\nAllow: /"
 
 @app.route("/")
 def home():
@@ -33,6 +37,7 @@ def download_video():
     file_id = str(uuid.uuid4())
     final_path = os.path.join(DOWNLOAD_DIR, f"{file_id}.mp4")
 
+    # yt-dlp এর জন্য আপডেট করা অপশন
     ydl_opts = {
         "format": f"bestvideo[height<={quality}][ext=mp4]+bestaudio[ext=m4a]/best[height<={quality}][ext=mp4]/best",
         "outtmpl": final_path,
@@ -41,6 +46,10 @@ def download_video():
         "ignoreerrors": False,
         "noplaylist": True,
         "merge_output_format": "mp4",
+        # সাইটগুলো মাঝেমধ্যে ব্লক করলে এটি সাহায্য করে
+        "http_headers": {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+        }
     }
 
     try:
@@ -54,6 +63,7 @@ def download_video():
         @after_this_request
         def remove_file(response):
             try:
+                # ফাইল পাঠানো শেষ হলে ডিলিট করা
                 if os.path.exists(final_path):
                     os.remove(final_path)
             except Exception as e:
@@ -69,5 +79,6 @@ def download_video():
         return jsonify({"error": f"Download failed: {str(e)}"}), 500
 
 if __name__ == "__main__":
+    # Render বা Heroku-র ডাইনামিক পোর্ট সাপোর্ট
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
