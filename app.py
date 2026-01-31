@@ -12,7 +12,6 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DOWNLOAD_DIR = os.path.join(BASE_DIR, "downloads")
 os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 
-# এই অংশটি আপনার ওয়েবসাইট দেখানোর জন্য জরুরি (Home Route)
 @app.route("/")
 def home():
     return render_template("index.html")
@@ -29,13 +28,20 @@ def download_video():
     file_id = str(uuid.uuid4())
     output_template = os.path.join(DOWNLOAD_DIR, f"{file_id}.%(ext)s")
 
+    # ইউটিউব ব্লক এড়াতে শক্তিশালী কনফিগারেশন
     ydl_opts = {
         "format": f"bestvideo[height<={quality}][ext=mp4]+bestaudio[ext=m4a]/best[height<={quality}][ext=mp4]/best",
         "outtmpl": output_template,
-        "cookiefile": "cookies.txt",
         "merge_output_format": "mp4",
+        "cookiefile": "cookies.txt",  # গিটহাবে অবশ্যই cookies.txt ফাইল থাকতে হবে
         "quiet": True,
         "noplaylist": True,
+        "extractor_args": {
+            "youtube": {
+                "player_client": ["android", "web"],
+                "po_token": ["web+web_embedded"]
+            }
+        },
         "http_headers": {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
         }
