@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://fty-media-tools-1.onrender.com/sitemap.xml
