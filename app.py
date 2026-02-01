@@ -19,7 +19,21 @@ def google_verify():
 # ২. রোবটস ফাইল (গুগলকে সাইট ক্রল করার অনুমতি দিতে)
 @app.route("/robots.txt")
 def robots():
-    return "User-agent: *\nAllow: /"
+    # এখানে সাইটম্যাপের লিঙ্ক যুক্ত করা হয়েছে যাতে গুগল সহজে খুঁজে পায়
+    return "User-agent: *\nAllow: /\nSitemap: https://fty-media-tools-1.onrender.com/sitemap.xml"
+
+# ৩. সাইটম্যাপ রুট (গুগল সার্চ কনসোলের "Couldn't fetch" এরর ঠিক করতে)
+@app.route("/sitemap.xml")
+def sitemap():
+    sitemap_xml = """<?xml version="1.0" encoding="UTF-8"?>
+    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+      <url>
+        <loc>https://fty-media-tools-1.onrender.com/</loc>
+        <lastmod>2026-02-01</lastmod>
+        <priority>1.0</priority>
+      </url>
+    </urlset>"""
+    return sitemap_xml, {'Content-Type': 'application/xml'}
 
 @app.route("/")
 def home():
@@ -46,7 +60,6 @@ def download_video():
         "ignoreerrors": False,
         "noplaylist": True,
         "merge_output_format": "mp4",
-        # সাইটগুলো মাঝেমধ্যে ব্লক করলে এটি সাহায্য করে
         "http_headers": {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
         }
@@ -63,7 +76,6 @@ def download_video():
         @after_this_request
         def remove_file(response):
             try:
-                # ফাইল পাঠানো শেষ হলে ডিলিট করা
                 if os.path.exists(final_path):
                     os.remove(final_path)
             except Exception as e:
@@ -79,6 +91,5 @@ def download_video():
         return jsonify({"error": f"Download failed: {str(e)}"}), 500
 
 if __name__ == "__main__":
-    # Render বা Heroku-র ডাইনামিক পোর্ট সাপোর্ট
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
