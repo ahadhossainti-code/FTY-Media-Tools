@@ -1,4 +1,4 @@
-from flask import Flask, request, send_file, jsonify, render_template, after_this_request
+from flask import Flask, request, send_file, jsonify, render_template, after_this_request, Response
 from flask_cors import CORS
 import yt_dlp
 import os
@@ -16,11 +16,12 @@ os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 def google_verify():
     return "google-site-verification: google9e2fb0bcc08994d3.html"
 
-# ২. রোবটস ফাইল (গুগলকে সাইট ক্রল করার অনুমতি দিতে)
+# ২. রোবটস ফাইল (গুগলকে সাইট ক্রল করার অনুমতি দিতে এবং লাইন ব্রেক ঠিক করতে)
 @app.route("/robots.txt")
 def robots():
-    # এখানে সাইটম্যাপের লিঙ্ক যুক্ত করা হয়েছে যাতে গুগল সহজে খুঁজে পায়
-    return "User-agent: *\nAllow: /\nSitemap: https://fty-media-tools-1.onrender.com/sitemap.xml"
+    # এখানে '\n' ব্যবহার করা হয়েছে এবং মিম-টাইপ 'text/plain' করা হয়েছে যাতে গুগল পড়তে পারে
+    robots_content = "User-agent: *\nAllow: /\nSitemap: https://fty-media-tools-1.onrender.com/sitemap.xml"
+    return Response(robots_content, mimetype='text/plain')
 
 # ৩. সাইটম্যাপ রুট (গুগল সার্চ কনসোলের "Couldn't fetch" এরর ঠিক করতে)
 @app.route("/sitemap.xml")
@@ -29,11 +30,11 @@ def sitemap():
     <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
       <url>
         <loc>https://fty-media-tools-1.onrender.com/</loc>
-        <lastmod>2026-02-01</lastmod>
+        <lastmod>2026-02-14</lastmod>
         <priority>1.0</priority>
       </url>
     </urlset>"""
-    return sitemap_xml, {'Content-Type': 'application/xml'}
+    return Response(sitemap_xml, mimetype='application/xml')
 
 @app.route("/")
 def home():
